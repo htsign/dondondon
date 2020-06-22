@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBoxTreeItem;
@@ -15,9 +18,10 @@ public class SpecificTabSettingController implements Initializable {
     public void initialize(java.net.URL url, java.util.ResourceBundle bundle) {
         TreeItem<String> rootItem = new TreeItem<>("root");
         TreeItem<String> server = new CheckBoxTreeItem<>("hogehoge.example.com");
-        server.getChildren().add(new CheckBoxTreeItem<>("Home"));
-        server.getChildren().add(new CheckBoxTreeItem<>("Local"));
-        server.getChildren().add(new CheckBoxTreeItem<>("Notification"));
+        server.getChildren().addAll(
+            Stream.of("Home", "Local", "Notification")
+                .map(CheckBoxTreeItem<String>::new).collect(Collectors.toList())
+        );
         server.setExpanded(true);
         treeView.setCellFactory((TreeView<String> p) -> new CheckBoxTreeCell<String>());
         rootItem.getChildren().add(server);

@@ -3,6 +3,7 @@ package misc;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.Map;
 
 public class UploadImageChooser {
     public static void choose(){
@@ -15,19 +16,16 @@ public class UploadImageChooser {
         File file = fileChooser.showOpenDialog(null); // TODO: stage渡す
 
         if(file != null) {
+            var mimeTypes = Map.of(
+                "jpg", "image/jpeg",
+                "png", "image.png",
+                "gif", "image/gif"
+            );
+
             System.out.println(file.getPath());
             String[] strings = file.getPath().split("\\.");
             String ext = strings[strings.length - 1];
-            String mimeType = null;
-            if(ext.equals("jpg")){
-                mimeType = "image/jpeg";
-            }
-            if(ext.equals("png")){
-                mimeType = "image/png";
-            }
-            if(ext.equals("gif")){
-                mimeType = "image/gif";
-            }
+            String mimeType = mimeTypes.get(ext);
             System.out.println(mimeType);
         }
     }

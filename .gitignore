@@ -5,3 +5,8 @@ out/
 .idea/*
 !.idea/gradle.xml
 !.idea/misc.xml
+
+.settings/
+.theia/
+.vscode/
+bin/

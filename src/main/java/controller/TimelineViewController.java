@@ -113,7 +113,7 @@ public class TimelineViewController implements Initializable, IContentListContro
         final String EMOJI_TEST = "";
         final String twemojiFooter = "<script>twemoji.parse(document.body)</script>";
         final String contentFooter = "<br></div>"+toCharacterReference(EMOJI_TEST)+twemojiFooter+"</body></html>";
-        ObservableList selectedCells = tableView.getSelectionModel().getSelectedCells();
+        ObservableList<TablePosition> selectedCells = tableView.getSelectionModel().getSelectedCells();
         if(selectedCells == null) return;
 
         selectedCells.addListener(new ListChangeListener() {
@@ -204,17 +204,18 @@ public class TimelineViewController implements Initializable, IContentListContro
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
             alert.setTitle("投稿情報");
             alert.getDialogPane().setHeaderText("投稿情報");
-            String contentText = "";
-            contentText = contentText + "データソース(種類): " + selectedToot.dataOriginInfo.serverType + "\n";
-            contentText = contentText + "データソース(ホスト): " + selectedToot.dataOriginInfo.hostname + "\n";
-            contentText = contentText + "データソース(ユーザー): " + selectedToot.dataOriginInfo.username + "\n";
-            contentText = contentText + "投稿(閲覧注意): " + selectedToot.sensitive + "\n";
-            contentText = contentText + "投稿(お気に入り状態): " + selectedToot.favorited + "\n";
-            contentText = contentText + "投稿(リブログ状態): " + selectedToot.reblogged + "\n";
-            contentText = contentText + "投稿(ID): " + selectedToot.id + "\n";
-            contentText = contentText + "投稿(アカウント): " + selectedToot.acct + "\n";
-            contentText = contentText + "クライアント(名前): " + selectedToot.applicationName + "\n";
-            contentText = contentText + "クライアント(WebSite): " + selectedToot.applicationWebSite + "\n";
+            String contentText = String.join("\n",
+                "データソース(種類): " + selectedToot.dataOriginInfo.serverType,
+                "データソース(ホスト): " + selectedToot.dataOriginInfo.hostname,
+                "データソース(ユーザー): " + selectedToot.dataOriginInfo.username,
+                "投稿(閲覧注意): " + selectedToot.sensitive,
+                "投稿(お気に入り状態): " + selectedToot.favorited,
+                "投稿(リブログ状態): " + selectedToot.reblogged,
+                "投稿(ID): " + selectedToot.id,
+                "投稿(アカウント): " + selectedToot.acct,
+                "クライアント(名前): " + selectedToot.applicationName,
+                "クライアント(WebSite): " + selectedToot.applicationWebSite
+            ) + "\n";
             alert.getDialogPane().setContentText(contentText);
             ButtonType button = alert.showAndWait().orElse(ButtonType.OK);
             System.out.println(button.toString());
@@ -250,31 +251,22 @@ public class TimelineViewController implements Initializable, IContentListContro
             ObservableList<TableColumn<TimelineGenerator.RowContent, ? >> columns = tableView.getColumns();
             for( TableColumn<TimelineGenerator.RowContent, ?>  column : columns ) column.setSortable(false);
 
-            tableView.setRowFactory(new Callback<TableView<TimelineGenerator.RowContent>, TableRow<TimelineGenerator.RowContent>>() {
-                @Override
-                public TableRow<TimelineGenerator.RowContent> call(TableView<TimelineGenerator.RowContent> tootCellTableView) {
-                    TimelineViewController.TootCell tootCell = new TootCell();
-                    tootCell.getStyleClass().add("toot-row");
-                    return tootCell;
-                }
+            tableView.setRowFactory((TableView<TimelineGenerator.RowContent> tootCellTableView) -> {
+                var tootCell = new TootCell();
+                tootCell.getStyleClass().add("toot-row");
+                return tootCell;
             });
         }
     }
 
 
     String toCharacterReference(String str) {
-        int len = str.length();
-        int[] codePointArray = new int[str.codePointCount(0, len)];
-
-        for (int i = 0, num = 0; i < len; i = str.offsetByCodePoints(i, 1)) {
-            codePointArray[num] = str.codePointAt(i);
-            num += 1;
-        }
+        int[] codePointArray = str.codePoints().toArray();
 
         StringBuffer stringBuffer = new StringBuffer();
         for (int value : codePointArray){
             if(value >= 0x10000){
-                stringBuffer.append("&#x" + (Integer.toHexString(value)) + ";");
+                stringBuffer.append("&#x" + Integer.toHexString(value) + ";");
             }else {
                 stringBuffer.append(Character.toChars(value));
             }

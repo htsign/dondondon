@@ -181,21 +181,11 @@ public class MastodonTimelineParser {
             List<String> imagesURL = new ArrayList<>();
 
             // TODO: typeを使って動画であることを画面上で明示
-            if(toot.media_attachments.size() > 0) {
-                for( Media media_attachment : toot.media_attachments ){
-                    if (validateURL(media_attachment.preview_url)) {
-                        imagesURL.add(media_attachment.preview_url);
-                    }
-                }
-            }
-            else if(toot.reblog != null && toot.reblog.media_attachments.size() > 0) {
-                // TODO: なんかReblogの時の画像はこっちにあるようだ（本文はtoot.contentにあるのに) よく分からんので調べる
-                for( Media media_attachment : toot.reblog.media_attachments ){
-                    if (validateURL(media_attachment.preview_url)) {
-                        imagesURL.add(media_attachment.preview_url);
-                    }
-                }
-            }
+            List<Media> mediaAttachments = (toot.reblog != null ? toot.reblog : toot).media_attachments;
+            imagesURL.addAll(mediaAttachments.stream()
+                .map(attachment -> attachment.preview_url)
+                .filter(url -> validateURL(url))
+                .collect(Collectors.toList()));
 
             BufferedImage avatarIcon = null;
             if (validateURL(tootEntity.account.avatar_static)) {

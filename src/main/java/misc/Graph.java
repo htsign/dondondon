@@ -18,16 +18,15 @@ public class Graph {
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Number of Hours");
-        final LineChart<String, Number> lineChart =
-                new LineChart<String, Number>(xAxis, yAxis);
+        final var lineChart = new LineChart<String, Number>(xAxis, yAxis);
 
         lineChart.setTitle(title);
-        XYChart.Series series = new XYChart.Series();
+        var series = new XYChart.Series<String, Number>();
         series.setName(name);
-        List<XYChart.Data<String, Integer>> dataList =
+        List<XYChart.Data<String, Number>> dataList =
                 data.entrySet().stream().map(
                         item -> {
-                            return new XYChart.Data<String, Integer>(item.getKey(), item.getValue());
+                            return new XYChart.Data<String, Number>(item.getKey(), item.getValue());
                         }).collect(
                         Collectors.toList()
                 );

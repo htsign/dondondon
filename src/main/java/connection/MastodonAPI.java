@@ -1,7 +1,7 @@
 package connection;
 
 import java.net.URLEncoder;
-import java.util.HashMap;
+import java.util.Map;
 
 import static connection.WebRequest.requestGET;
 
@@ -17,8 +17,7 @@ public class MastodonAPI {
 
     public String reblog(String tootId) {
         String url = mastodonHost + "/api/v1/statuses/"+tootId+"/reblog";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
 
         String responseBody = WebRequest.requestPOST(url, headers, "");
         return responseBody;
@@ -26,8 +25,7 @@ public class MastodonAPI {
 
     public String addFavorite(String tootId) {
         String url = mastodonHost + "/api/v1/statuses/"+tootId+"/favourite";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
 
         String responseBody = WebRequest.requestPOST(url, headers, "");
         return responseBody;
@@ -35,8 +33,7 @@ public class MastodonAPI {
 
     public void postStatus(String postText, String inReplyToId) {
         String url = mastodonHost + "/api/v1/statuses";
-        HashMap<String,String> headers = new HashMap<String, String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
 
         String encodedText = "";
         try {
@@ -55,32 +52,28 @@ public class MastodonAPI {
 
     public String getHomeTimeline() {
         String url = mastodonHost + "/api/v1/timelines/home";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
         String responseBody = requestGET(url, headers);
         return responseBody;
     }
 
     public String getLocalTimeline() {
         String url = mastodonHost + "/api/v1/timelines/public?local=true";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
         String responseBody = requestGET(url, headers);
         return responseBody;
     }
 
     public String getUserTimeline(String userId) {
         String url = mastodonHost + "/api/v1/accounts/"+userId+"/statuses";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
         String responseBody = requestGET(url, headers);
         return responseBody;
     }
 
     public String getNotification() {
         String url = mastodonHost + "/api/v1/notifications";
-        HashMap<String,String> headers = new HashMap<String,String>();
-        headers.put("Authorization", "Bearer " + accessToken);
+        var headers = Map.of("Authorization", "Bearer " + accessToken);
         String responseBody = requestGET(url, headers);
         return responseBody;
     }

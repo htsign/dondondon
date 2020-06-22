@@ -23,16 +23,13 @@ public final class ImageCommons {
     }
 
     public static byte[] readImageAsByte(URL url) {
-        try {
+        try (var byteArrayOutputStream = new ByteArrayOutputStream()) {
             BufferedImage bufferedImage = resizeImage(ImageIO.read(url), 64, 64);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
 
             byteArrayOutputStream.flush();
-            byte[] buffer = byteArrayOutputStream.toByteArray();
-            byteArrayOutputStream.close();
-            return buffer;
+            return byteArrayOutputStream.toByteArray();
         }catch (Exception e){
             e.printStackTrace();
         }

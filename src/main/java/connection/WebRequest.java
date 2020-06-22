@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,10 +14,10 @@ public class WebRequest {
 
 
     public static String requestPOST(String URLStr, String parameterString){
-        return requestPOST(URLStr, new HashMap<>(), parameterString);
+        return requestPOST(URLStr, Map.of(), parameterString);
     }
 
-    public static String requestPOST(String URLStr, HashMap<String,String> headers, String parameterString){
+    public static String requestPOST(String URLStr, Map<String,String> headers, String parameterString){
         HttpURLConnection connection = null;
         InputStream in = null;
         BufferedReader reader = null;
@@ -86,7 +85,7 @@ public class WebRequest {
         return "";
     }
 
-    public static String requestGET(String URLStr, HashMap<String,String> headers){
+    public static String requestGET(String URLStr, Map<String,String> headers){
         HttpURLConnection connection = null;
         InputStream in = null;
         BufferedReader reader = null;

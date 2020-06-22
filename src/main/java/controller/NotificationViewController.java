@@ -86,13 +86,10 @@ public class NotificationViewController implements Initializable, IContentListCo
             ObservableList<TableColumn<NotificationGenerator.RowContent, ?>> columns = tableView.getColumns();
             for (TableColumn<NotificationGenerator.RowContent, ?> column : columns) column.setSortable(false);
 
-            tableView.setRowFactory(new Callback<TableView<NotificationGenerator.RowContent>, TableRow<NotificationGenerator.RowContent>>() {
-                @Override
-                public TableRow<NotificationGenerator.RowContent> call(TableView<NotificationGenerator.RowContent> tootCellTableView) {
-                    NotificationViewController.NotificationCell notificationCell = new NotificationViewController.NotificationCell();
-                    notificationCell.getStyleClass().add("notification-row");
-                    return notificationCell;
-                }
+            tableView.setRowFactory((TableView<NotificationGenerator.RowContent> tootCellTableView) -> {
+                var notificationCell = new NotificationViewController.NotificationCell();
+                notificationCell.getStyleClass().add("notification-row");
+                return notificationCell;
             });
         }
     }

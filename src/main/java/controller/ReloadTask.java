@@ -17,11 +17,7 @@ public class ReloadTask {
 
     public void start() {
         timeline = new Timeline(
-                new KeyFrame(Duration.millis(60000),
-                        event -> {
-                            reload();
-                        }
-                )
+                new KeyFrame(Duration.millis(60000), event -> reload())
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

@@ -2,8 +2,6 @@ package controller;
 
 import connection.MastodonAPI;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -117,14 +115,10 @@ public class Controller implements Initializable {
 
     @FXML
     protected void onMenuItemUserIconInvisible(ActionEvent evt) {
-        if (userIconVisible.selectedProperty().get()) {
-            for (IContentListController contentController : contentControllers.values()) {
-                contentController.iconInvisible(true);
-            }
-        } else {
-            for (IContentListController contentController : contentControllers.values()) {
-                contentController.iconInvisible(false);
-            }
+        boolean visible = userIconVisible.selectedProperty().get();
+        
+        for (IContentListController contentController : contentControllers.values()) {
+            contentController.iconInvisible(visible);
         }
     }
 
@@ -236,12 +230,7 @@ public class Controller implements Initializable {
             contentControllers.put(tabKey, timelineViewController);
             // 閉じたときにコントローラの登録を外す
             tab.setClosable(true);
-            tab.setOnClosed(new EventHandler<Event>() {
-                @Override
-                public void handle(Event t) {
-                    contentControllers.remove(tabKey);
-                }
-            });
+            tab.setOnClosed(t -> contentControllers.remove(tabKey));
             // リロードタスクでロードしないので手動読み込み
             timelineViewController.reload();
         } catch (Exception e) {
